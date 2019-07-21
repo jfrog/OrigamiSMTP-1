@@ -8,6 +8,7 @@ import javax.net.ssl.SSLHandshakeException;
 
 import com.pessetto.origamismtp.commandhandlers.CommandHandler;
 import com.pessetto.origamismtp.constants.Constants;
+import com.pessetto.origamismtp.filehandlers.EmailHandler;
 import com.pessetto.origamismtp.status.AuthStatus;
 
 /** Represents a class to handle connections
@@ -17,13 +18,18 @@ import com.pessetto.origamismtp.status.AuthStatus;
 public class ConnectionHandler implements Runnable {
 
 	private Socket connectionSocket;
-	
+	private String[] protocols;
+	private EmailHandler eh;
+
 	/** Creates new instance of the ConnectionHandler on socket
 	 * @param connectionSocket The socket to use
+	 * @param protocols Secure TLS protocols to enable on the socket
 	 */
-	public ConnectionHandler(Socket connectionSocket)
+	public ConnectionHandler(Socket connectionSocket, String[] protocols,  EmailHandler eh)
 	{
 		this.connectionSocket = connectionSocket;
+		this.protocols = protocols;
+		this.eh = eh;
 	}
 
 	/** Runs the connection in a new thread
@@ -34,7 +40,7 @@ public class ConnectionHandler implements Runnable {
 		{
 			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 			Scanner inFromClient = new Scanner(connectionSocket.getInputStream());
-			CommandHandler commandHandler = new CommandHandler(outToClient,inFromClient);
+			CommandHandler commandHandler = new CommandHandler(outToClient, inFromClient, eh);
 			inFromClient.useDelimiter(Constants.CRLF);
 			String welcome = "220 127.0.0.1 SMTP Ready"+Constants.CRLF;
 			outToClient.writeBytes(welcome);
@@ -77,7 +83,7 @@ public class ConnectionHandler implements Runnable {
 				}
 				else if(cmdId.equals("starttls"))
 				{
-					connectionSocket = commandHandler.handleSTARTTLS(connectionSocket);
+					connectionSocket = commandHandler.handleSTARTTLS(connectionSocket, protocols);
 					outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 					inFromClient = new Scanner(connectionSocket.getInputStream());
 					commandHandler.setInAndOutFromClient(inFromClient, outToClient);

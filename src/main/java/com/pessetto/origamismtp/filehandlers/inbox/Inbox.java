@@ -27,7 +27,7 @@ public class Inbox implements Serializable
 	 */
 	private Inbox()
 	{
-		messages = new LinkedList<Message>();
+		messages = new LinkedList<>();
 	}
 	
 	/** Adds new message listener to inbox
@@ -186,5 +186,9 @@ public class Inbox implements Serializable
 		{
 			ex.printStackTrace();
 		}
+	}
+
+    public String getSubject() {
+		return messages.get(0).getSubject();
 	}
 }

@@ -3,11 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pessetto.origamismtp</groupId>
     <artifactId>OrigamiSMTP</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3-jfrog</version>
     <name>Origami SMTP</name>
     <url>https://travispessetto.github.io/OrigamiSMTP/</url>
     <description>
         A TLS Enabled Fake SMTP Server for Development https://travispessetto.github.io/OrigamiSMTP
+        Forked for JFrog at https://github.com/jfrog/OrigamiSMTP
     </description>
     <licenses>
         <license>
@@ -182,7 +183,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.11.2</version>
+            <version>1.11.3</version>
             <type>jar</type>
         </dependency>
         <dependency>

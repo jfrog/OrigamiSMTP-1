@@ -13,16 +13,21 @@ import com.pessetto.origamismtp.filehandlers.inbox.Message;
  */
 public class EmailHandler
 {
+
 	/** Creates new EmailHandler instance
 	 * @param mail The current MAILHandler
 	 * @param rcpt The current RCPTHandler
 	 * @param data The current DataHandler
 	 */
-	public EmailHandler(MAILHandler mail, RCPTHandler rcpt, DataHandler data)
+
+	Inbox inbox = Inbox.getInstance();
+
+	public EmailHandler() {}
+
+	public void addNewMessage(MAILHandler mail, RCPTHandler rcpt, DataHandler data)
 	{
 		if(mail != null && rcpt != null && data != null)
 		{
-			Inbox inbox = Inbox.getInstance();
 			Message message = new Message();
 			message.setFrom(mail.getSender());
 			message.setTo(rcpt.getRecipient());
@@ -31,7 +36,11 @@ public class EmailHandler
 			inbox.addMessage(message);
 		}
 	}
-	
+
+	public Inbox getInbox() {
+		return inbox;
+	}
+
 	private int getUnixTime()
 	{
 		return (int)(System.currentTimeMillis() / 1000L);

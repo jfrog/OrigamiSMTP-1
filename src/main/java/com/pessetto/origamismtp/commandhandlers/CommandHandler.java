@@ -27,16 +27,18 @@ public class CommandHandler
 	private DataOutputStream outToClient;
 	private Scanner inFromClient;
 	private boolean secure;
-	
+	private EmailHandler eh;
+
 	/** Creates a new CommandHandler
 	 * @param outToClient A stream that goes out to the client
 	 * @param inFromClient A stream that comes in from the client
 	 */
-	public CommandHandler(DataOutputStream outToClient, Scanner inFromClient)
+	public CommandHandler(DataOutputStream outToClient, Scanner inFromClient, EmailHandler eh)
 	{
 		this.outToClient = outToClient;
 		this.inFromClient = inFromClient;
 		secure = false;
+		this.eh = eh;
 	}
 	
 	/** Handles the AUTH command
@@ -64,7 +66,7 @@ public class CommandHandler
 		{
 			data.processMessage(inFromClient);
 			handleResponse(data.getResponse());
-			EmailHandler eh = new EmailHandler(this.mail,this.rcpt,this.data);
+			eh.addNewMessage(this.mail,this.rcpt,this.data);
 		}
 	}
 	
@@ -118,11 +120,11 @@ public class CommandHandler
 	 * @return The new encrypted socket
 	 * @throws IOException Input or Output failed
 	 */
-	public SSLSocket handleSTARTTLS(Socket old) throws IOException
+	public SSLSocket handleSTARTTLS(Socket old, String[] protocols) throws IOException
 	{
 		tls = new STARTTLSHandler(old);
 		handleResponse(tls.getResponse());
-		SSLSocket ssocket = tls.enableTLS(old);
+		SSLSocket ssocket = tls.enableTLS(old, protocols);
 		System.out.println("Secure socket setup");
 		secure = true;
 		return ssocket;

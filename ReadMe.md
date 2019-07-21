@@ -2,6 +2,20 @@
 
 # ![Imgur][12] Origami SMTP
 
+## JFrog notes:
+
+This is a fork of [https://github.com/travispessetto/OrigamiSMTP]
+
+This mock server is used in Artifactory for SMTP over TLS connection testing
+
+Using this library helps to test [https://www.jfrog.com/jira/browse/RTFACT-19142]
+
+## Building locally
+
+mvn clean install
+
+_______________________________________________________
+
 Origami SMTP is a fake SMTP server with SSL (STARTTLS) support. The
 reason it was developed was so that developers could test their
 applications that require a secure SMTP server without having

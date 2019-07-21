@@ -15,7 +15,7 @@ public class OrigamiSMTPServerThread implements Runnable
 	
 	public OrigamiSMTPServerThread(int port)
 	{
-		server = new OrigamiSMTP(port);
+		server = new OrigamiSMTP(port, null);
 	}
 	
 

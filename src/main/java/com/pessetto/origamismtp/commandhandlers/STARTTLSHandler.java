@@ -8,7 +8,6 @@ import java.security.KeyStore;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLHandshakeException;
-import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManagerFactory;
@@ -79,13 +78,14 @@ public class STARTTLSHandler
 	 * @return A new encrypted socket
 	 * @throws IOException Input or Output failed most likely from failed Handshake
 	 */
-	public SSLSocket enableTLS(Socket old) throws IOException
+	public SSLSocket enableTLS(Socket old, String[] protocols) throws IOException
 	{
 		response = null;
 		try
 		{
 			newSocket = (SSLSocket) sslContext.getSocketFactory().createSocket(old, null,old.getPort(),false);
-			newSocket.setEnabledProtocols(newSocket.getSupportedProtocols());
+			newSocket.setEnabledProtocols(
+					(protocols != null && protocols.length > 0 ) ? protocols : newSocket.getSupportedProtocols());
 			newSocket.setEnabledCipherSuites(newSocket.getSupportedCipherSuites());
 			newSocket.setUseClientMode(false);
 			Thread.sleep(1000);
